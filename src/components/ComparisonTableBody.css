@@ -1,0 +1,13 @@
+table > tbody > tr.ComparisonTableBody-groupLabel > td {
+  font-weight: bold;
+  letter-spacing: 0.03rem;
+  color: #777;
+}
+
+table > tbody.ComparisonTableBody + tbody {
+  border-top: 3rem solid white;
+}
+
+.ComparisonTableBody td:nth-child(n+2) {
+  text-align: right;
+}

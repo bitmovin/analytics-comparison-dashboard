@@ -1,0 +1,14 @@
+#PeriodSelection {
+  padding: 0.5rem 1rem;
+  max-width: 60rem;
+}
+
+.PeriodSelection-dateSelection {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+}
+
+.PeriodSelection-dateSelection .react-datepicker-popper {
+  z-index: 3;
+}

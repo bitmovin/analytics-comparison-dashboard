@@ -1,0 +1,17 @@
+div.Filter {
+  display: flex;
+  align-items: center;
+  height: 3.4rem;
+}
+
+.Filter label {
+  margin: 0;
+  font-weight: normal;
+  text-transform: capitalize;
+}
+
+.Filter select {
+  display: inline-block;
+  width: auto;
+  margin-left: 1rem;
+}

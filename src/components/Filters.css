@@ -1,0 +1,34 @@
+.Filters {
+  margin-top: 10rem;
+}
+
+.Filters h2 {
+  font-size: 1.7rem;
+  font-weight: 200;
+  letter-spacing: 0.1rem;
+  margin: 0 0 1.1rem;
+}
+
+.Filters-box {
+  display: flex;
+}
+
+.Filters-list {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.Filters-list > * {
+  margin-left: 3rem;
+  padding-left: 3rem;
+  border-left: 1px solid #BBB;
+}
+
+.Filters-list > div {
+  margin-bottom: 1.3rem;
+}
+
+.Filters .dropdown-menu {
+  text-transform: capitalize;
+}

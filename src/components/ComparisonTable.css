@@ -1,0 +1,28 @@
+.ComparisonTable {
+  margin-top: 6rem;
+}
+
+.ComparisonTable .table {
+  transition: opacity 0.2s ease;
+}
+
+.ComparisonTable .table.isLoading {
+  opacity: 0.7;
+}
+
+.ComparisonTable .headerContainer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.ComparisonTable .table > thead > tr > th {
+  line-height: 3.2rem;
+  padding-top: 0.6rem;
+  padding-bottom: 0.6rem;
+}
+
+.ComparisonTable .table > tbody > tr > td {
+  padding-top: 1.3rem;
+  padding-bottom: 1.3rem;
+}
