@@ -1,10 +1,16 @@
 import React, { Component } from 'react';
 import AmountCell from '../components/AmountCell.js';
 import TimeCell from '../components/TimeCell.js';
+import RoundedCell from '../components/RoundedCell.js';
+import BitrateCell from '../components/BitrateCell.js';
+import FactorCell from '../components/FactorCell.js';
 
 const cellTypes = {
   amount: AmountCell,
   time: TimeCell,
+  rounded: RoundedCell,
+  bitrate: BitrateCell,
+  factor: FactorCell,
 };
 
 export default class ComparisonTableRow extends Component {
@@ -31,7 +37,7 @@ export default class ComparisonTableRow extends Component {
           .between(fromDate, toDate)
           .filter(comparableKey, 'EQ', columnKey)
         const filteredQuery = filters.reduce((q, filterParams) => q.filter(...filterParams), baseQuery);
-        return filteredQuery.query();
+        return filteredQuery.query().catch(x => {});
       })
 
       const queryResults = await Promise.all(runningQueries);

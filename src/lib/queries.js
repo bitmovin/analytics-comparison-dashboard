@@ -44,12 +44,62 @@ const impressionQueries = [
     aggregation: 'count',
     filters: [['PLAYER_STARTUPTIME', 'GT', 0]],
     type: 'amount',
+  }
+];
+
+const quality = [
+  {
+    label: 'Average Bitrate',
+    dimension: 'VIDEO_BITRATE',
+    aggregation: 'avg',
+    filters: [['VIDEO_BITRATE', 'GT', 0]],
+    type: 'bitrate'
   },
+  {
+    label: 'Scale Factor',
+    dimension: 'SCALE_FACTOR',
+    aggregation: 'avg',
+    filters: [],
+    type: 'factor'
+  },
+  {
+    label: 'Average View Time',
+    dimension: 'VIEWTIME',
+    aggregation: 'avg',
+    filters: [],
+    type: 'time'
+  }
+]
+
+const errorQueries = [
+  {
+    label: 'Total Errors',
+    dimension: 'IMPRESSION_ID',
+    aggregation: 'count',
+    filters: [['ERROR_CODE', 'GT', 0]],
+    type: 'amount'
+  },
+  {
+    label: 'Buffering Events',
+    dimension: 'BUFFERED',
+    aggregation: 'count',
+    filters: [['BUFFERED', 'GT', 0]],
+    type: 'amount'
+  },
+  {
+    label: 'Average Buffering Time',
+    dimension: 'BUFFERED',
+    aggregation: 'avg',
+    filters: [['BUFFERED', 'GT', 0]],
+    type: 'time'
+  }
 ];
 
 const queryGroups = [
   { label: 'Impressions', queries: impressionQueries },
   { label: 'Startup times', queries: startupTimeQueries },
+  { label: 'Quality', queries: quality },
+  { label: 'Errors', queries: errorQueries },
 ]
 
 export default queryGroups;
