@@ -67,7 +67,7 @@ const quality = [
     dimension: 'VIEWTIME',
     aggregation: 'avg',
     filters: [],
-    type: 'time'
+    type: 'hightime'
   }
 ]
 
@@ -77,14 +77,14 @@ const errorQueries = [
     dimension: 'IMPRESSION_ID',
     aggregation: 'count',
     filters: [['ERROR_CODE', 'GT', 0]],
-    type: 'amount'
+    type: 'lowestAmount'
   },
   {
     label: 'Buffering Events',
     dimension: 'BUFFERED',
     aggregation: 'count',
     filters: [['BUFFERED', 'GT', 0]],
-    type: 'amount'
+    type: 'lowestAmount'
   },
   {
     label: 'Average Buffering Time',
