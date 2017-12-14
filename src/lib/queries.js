@@ -92,7 +92,23 @@ const errorQueries = [
     aggregation: 'avg',
     filters: [['BUFFERED', 'GT', 0]],
     type: 'time'
-  }
+  },
+  {
+    label: 'Error percentage',
+    dimension: 'IMPRESSION_ID',
+    aggregation: 'count',
+    queries: [
+      {
+        filters: [['ERROR_CODE', 'GT', 0]],
+      },
+      {
+        // just perform main query without any additions
+      }
+    ],
+    filters: [],
+    combineQueries: (totalErrors, totalImpressions) => totalErrors / totalImpressions,
+    type: 'percentage',
+  },
 ];
 
 const queryGroups = [
