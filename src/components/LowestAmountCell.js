@@ -1,10 +1,4 @@
 import React from 'react';
-import ComparisonTableCell from './ComparisonTableCell.js';
+import AmountCell from './AmountCell.js';
 
-export default function LowestAmountCell(props) {
-  return (
-    <ComparisonTableCell {...props} best="lowest" className="AmountCell">
-      {props.value}
-    </ComparisonTableCell>
-  );
-}
+export default (props) => <AmountCell {...props} best="lowest" />;

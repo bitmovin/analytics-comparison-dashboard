@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import AmountCell from '../components/AmountCell.js';
 import LowestAmountCell from '../components/LowestAmountCell.js';
 import TimeCell from '../components/TimeCell.js';
-import HighTimeCell from '../components/HighTimeCell.js';
-import RoundedCell from '../components/RoundedCell.js';
+import HighestTimeCell from '../components/HighestTimeCell.js';
 import BitrateCell from '../components/BitrateCell.js';
 import FactorCell from '../components/FactorCell.js';
 import PercentageCell from '../components/PercentageCell.js';
@@ -12,8 +11,7 @@ const cellTypes = {
   amount: AmountCell,
   lowestAmount: LowestAmountCell,
   time: TimeCell,
-  hightime: HighTimeCell,
-  rounded: RoundedCell,
+  highestTime: HighestTimeCell,
   bitrate: BitrateCell,
   factor: FactorCell,
   percentage: PercentageCell,

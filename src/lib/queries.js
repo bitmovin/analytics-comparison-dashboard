@@ -65,7 +65,7 @@ const quality = [
     label: 'Average View Time',
     dimension: 'VIEWTIME',
     aggregation: 'avg',
-    type: 'hightime'
+    type: 'highestTime'
   }
 ]
 
