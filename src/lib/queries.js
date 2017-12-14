@@ -78,20 +78,6 @@ const errorQueries = [
     type: 'lowestAmount'
   },
   {
-    label: 'Buffering Events',
-    dimension: 'BUFFERED',
-    aggregation: 'count',
-    filters: [['BUFFERED', 'GT', 0]],
-    type: 'lowestAmount'
-  },
-  {
-    label: 'Average Buffering Time',
-    dimension: 'BUFFERED',
-    aggregation: 'avg',
-    filters: [['BUFFERED', 'GT', 0]],
-    type: 'time'
-  },
-  {
     label: 'Error percentage',
     dimension: 'IMPRESSION_ID',
     aggregation: 'count',
@@ -106,13 +92,42 @@ const errorQueries = [
     combineQueries: (totalErrors, totalImpressions) => totalErrors / totalImpressions,
     type: 'percentage',
   },
+  {
+    label: 'Buffering Events',
+    dimension: 'BUFFERED',
+    aggregation: 'count',
+    filters: [['BUFFERED', 'GT', 0]],
+    type: 'lowestAmount'
+  },
+  {
+    label: 'Rebuffer percentage',
+    dimension: 'IMPRESSION_ID',
+    aggregation: 'count',
+    queries: [
+      {
+        filters: [['BUFFERED', 'GT', 0]],
+      },
+      {
+        // just perform main query without any additions
+      }
+    ],
+    combineQueries: (totalBuffering, totalImpressions) => totalBuffering / totalImpressions,
+    type: 'percentage',
+  },
+  {
+    label: 'Median Buffering Time',
+    dimension: 'BUFFERED',
+    aggregation: 'median',
+    filters: [['BUFFERED', 'GT', 0]],
+    type: 'time'
+  },
 ];
 
 const queryGroups = [
   { label: 'Impressions', queries: impressionQueries },
   { label: 'Startup times', queries: startupTimeQueries },
   { label: 'Quality', queries: quality },
-  { label: 'Errors', queries: errorQueries },
+  { label: 'Problems', queries: errorQueries },
 ]
 
 export default queryGroups;
