@@ -2,6 +2,7 @@
   "name": "comparison",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://demo.bitmovin.com/public/analytics/comparison",
   "dependencies": {
     "bitmovin-javascript": "^1.2.2",
     "country-list": "^1.1.0",

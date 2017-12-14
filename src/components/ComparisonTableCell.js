@@ -12,7 +12,7 @@ const text = ({ loading, children, value }) => {
 }
 
 const className = ({ value, loading, highestValue, lowestValue, best }) => {
-  if (loading || !value) {
+  if (loading || !value || !best) {
     return '';
   }
 

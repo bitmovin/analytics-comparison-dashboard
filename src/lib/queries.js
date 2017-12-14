@@ -44,12 +44,90 @@ const impressionQueries = [
     aggregation: 'count',
     filters: [['PLAYER_STARTUPTIME', 'GT', 0]],
     type: 'amount',
+  }
+];
+
+const quality = [
+  {
+    label: 'Average Bitrate',
+    dimension: 'VIDEO_BITRATE',
+    aggregation: 'avg',
+    filters: [['VIDEO_BITRATE', 'GT', 0]],
+    type: 'bitrate'
+  },
+  {
+    label: 'Scale Factor',
+    dimension: 'SCALE_FACTOR',
+    aggregation: 'avg',
+    type: 'factor'
+  },
+  {
+    label: 'Average View Time',
+    dimension: 'VIEWTIME',
+    aggregation: 'avg',
+    type: 'highestTime'
+  }
+]
+
+const errorQueries = [
+  {
+    label: 'Total Errors',
+    dimension: 'IMPRESSION_ID',
+    aggregation: 'count',
+    filters: [['ERROR_CODE', 'GT', 0]],
+    type: 'lowestAmount'
+  },
+  {
+    label: 'Error percentage',
+    dimension: 'IMPRESSION_ID',
+    aggregation: 'count',
+    queries: [
+      {
+        filters: [['ERROR_CODE', 'GT', 0]],
+      },
+      {
+        // just perform main query without any additions
+      }
+    ],
+    combineQueries: (totalErrors, totalImpressions) => totalErrors / totalImpressions,
+    type: 'percentage',
+  },
+  {
+    label: 'Buffering Events',
+    dimension: 'BUFFERED',
+    aggregation: 'count',
+    filters: [['BUFFERED', 'GT', 0]],
+    type: 'lowestAmount'
+  },
+  {
+    label: 'Rebuffer percentage',
+    dimension: 'IMPRESSION_ID',
+    aggregation: 'count',
+    queries: [
+      {
+        filters: [['BUFFERED', 'GT', 0]],
+      },
+      {
+        // just perform main query without any additions
+      }
+    ],
+    combineQueries: (totalBuffering, totalImpressions) => totalBuffering / totalImpressions,
+    type: 'percentage',
+  },
+  {
+    label: 'Median Buffering Time',
+    dimension: 'BUFFERED',
+    aggregation: 'median',
+    filters: [['BUFFERED', 'GT', 0]],
+    type: 'time'
   },
 ];
 
 const queryGroups = [
   { label: 'Impressions', queries: impressionQueries },
   { label: 'Startup times', queries: startupTimeQueries },
+  { label: 'Quality', queries: quality },
+  { label: 'Problems', queries: errorQueries },
 ]
 
 export default queryGroups;
