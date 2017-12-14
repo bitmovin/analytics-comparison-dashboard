@@ -59,14 +59,12 @@ const quality = [
     label: 'Scale Factor',
     dimension: 'SCALE_FACTOR',
     aggregation: 'avg',
-    filters: [],
     type: 'factor'
   },
   {
     label: 'Average View Time',
     dimension: 'VIEWTIME',
     aggregation: 'avg',
-    filters: [],
     type: 'hightime'
   }
 ]
@@ -105,7 +103,6 @@ const errorQueries = [
         // just perform main query without any additions
       }
     ],
-    filters: [],
     combineQueries: (totalErrors, totalImpressions) => totalErrors / totalImpressions,
     type: 'percentage',
   },

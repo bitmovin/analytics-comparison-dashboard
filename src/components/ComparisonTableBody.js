@@ -5,7 +5,7 @@ import './ComparisonTableBody.css';
 export default function ComparisonTableBody(props) {
   const { selectedColumnKeys, fromDate, toDate, licenseKey, queryBuilder, comparableKey,
     filters, groupLabel, queries } = props;
-  const filteredQueries = queries.map(q => ({ ...q, filters: [...q.filters, ...filters] }));
+  const filteredQueries = queries.map(q => ({ ...q, filters: [...(q.filters || []), ...filters] }));
 
   return (
     <tbody className="ComparisonTableBody">
