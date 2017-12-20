@@ -26,12 +26,12 @@ export default class ComparisonTable extends Component {
 
   fetchAttributeValues = async (attribute) => {
     const rows = await fetchAttributeRows({ ...this.props, attribute });
-    return rows.map(row => row[0]);
+    return rows.sort((a, b) => b[1] - a[1]).map(row => row[0]);
   }
 
   initialColumnKeys = async (comparableKey) => {
     const values = await this.fetchAttributeValues(comparableKey);
-    return values.slice(-3);
+    return values.slice(0, 3);
   }
 
   addColumn = (key) => {
