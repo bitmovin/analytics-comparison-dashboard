@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import AmountCell from '../components/AmountCell.js';
-import LowestAmountCell from '../components/LowestAmountCell.js';
-import TimeCell from '../components/TimeCell.js';
-import HighestTimeCell from '../components/HighestTimeCell.js';
-import BitrateCell from '../components/BitrateCell.js';
-import FactorCell from '../components/FactorCell.js';
-import PercentageCell from '../components/PercentageCell.js';
+import AmountCell from './AmountCell.js';
+import LowestAmountCell from './LowestAmountCell.js';
+import TimeCell from './TimeCell.js';
+import HighestTimeCell from './HighestTimeCell.js';
+import BitrateCell from './BitrateCell.js';
+import FactorCell from './FactorCell.js';
+import PercentageCell from './PercentageCell.js';
+import ComparisonTableRowLabel from './ComparisonTableRowLabel.js';
 
 const cellTypes = {
   amount: AmountCell,
@@ -80,7 +81,9 @@ export default class ComparisonTableRow extends Component {
 
     return (
       <tr className="ComparisonTableRow">
-        <td>{query.label}</td>
+        <td >
+          <ComparisonTableRowLabel info={query.info}>{query.label}</ComparisonTableRowLabel>
+        </td>
         {columnKeys.map((key, index) =>
           React.createElement(
             cellTypes[query.type],

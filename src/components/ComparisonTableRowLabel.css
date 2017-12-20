@@ -1,0 +1,7 @@
+.ComparisonTableRowLabel.withInfo {
+  border-bottom: 1px dashed #BBB;
+}
+
+#ComparisonTableRowLabel-tooltip {
+  margin-left: 1rem;
+}

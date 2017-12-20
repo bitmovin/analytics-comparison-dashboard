@@ -1,7 +1,19 @@
 const dimensions = [
-  { name: 'STARTUPTIME', label: 'Total Startup Time' },
-  { name: 'PLAYER_STARTUPTIME', label: 'Player Startup Time' },
-  { name: 'VIDEO_STARTUPTIME', label: 'Video Startup Time' }
+  {
+    name: 'STARTUPTIME',
+    label: 'Total Startup Time',
+    info: 'The sum of player startup time and video startup time'
+  },
+  {
+    name: 'PLAYER_STARTUPTIME',
+    label: 'Player Startup Time',
+    info: 'How long the player needed until it was ready for playback.'
+   },
+  {
+    name: 'VIDEO_STARTUPTIME',
+    label: 'Video Startup Time',
+    info: 'The time it took until the first frame was displayed after video playback is started'
+  }
 ];
 
 const aggregations = [
@@ -20,6 +32,7 @@ const startupTimeQueries = dimensions
     ],
     type: 'time',
     label: `${dimension.label} (${aggregation.label})`,
+    info: dimension.info
   })))
   .reduce((totalArray, dimArray) => [...totalArray, ...dimArray], []); // flatten
 
@@ -30,6 +43,7 @@ const impressionQueries = [
     aggregation: 'count',
     filters: [['VIDEO_STARTUPTIME', 'GT', 0]],
     type: 'amount',
+    info: 'Number of single video views'
   },
   {
     label: 'Unique Users',
@@ -37,6 +51,7 @@ const impressionQueries = [
     aggregation: 'count',
     filters: [['VIDEO_STARTUPTIME', 'GT', 0]],
     type: 'amount',
+    info: 'Users who watched one or more videos'
   },
   {
     label: 'Total page loads',
@@ -44,6 +59,7 @@ const impressionQueries = [
     aggregation: 'count',
     filters: [['PLAYER_STARTUPTIME', 'GT', 0]],
     type: 'amount',
+    info: 'How often a page containing one or more videos has been loaded'
   }
 ];
 
@@ -53,19 +69,22 @@ const quality = [
     dimension: 'VIDEO_BITRATE',
     aggregation: 'avg',
     filters: [['VIDEO_BITRATE', 'GT', 0]],
-    type: 'bitrate'
+    type: 'bitrate',
+    info: 'Your videos get delivered on average with this bitrate'
   },
   {
     label: 'Scale Factor',
     dimension: 'SCALE_FACTOR',
     aggregation: 'avg',
-    type: 'factor'
+    type: 'factor',
+    info: 'Values below 0 indicate playback in a window smaller than the video dimensions, above 0 means the opposite'
   },
   {
     label: 'Average View Time',
     dimension: 'VIEWTIME',
     aggregation: 'avg',
-    type: 'highestTime'
+    type: 'highestTime',
+    info: 'How long your viewers watched a single video on average'
   }
 ]
 
@@ -75,7 +94,8 @@ const errorQueries = [
     dimension: 'IMPRESSION_ID',
     aggregation: 'count',
     filters: [['ERROR_CODE', 'GT', 0]],
-    type: 'lowestAmount'
+    type: 'lowestAmount',
+    info: 'The number of all errors that occurred in the players of all viewers'
   },
   {
     label: 'Error percentage',
@@ -91,13 +111,15 @@ const errorQueries = [
     ],
     combineQueries: (totalErrors, totalImpressions) => totalErrors / totalImpressions,
     type: 'percentage',
+    info: 'The percentage of video impressions which yielded an error'
   },
   {
     label: 'Buffering Events',
     dimension: 'BUFFERED',
     aggregation: 'count',
     filters: [['BUFFERED', 'GT', 0]],
-    type: 'lowestAmount'
+    type: 'lowestAmount',
+    info: 'How many times your videos needed to rebuffer during playback'
   },
   {
     label: 'Rebuffer percentage',
@@ -113,13 +135,15 @@ const errorQueries = [
     ],
     combineQueries: (totalBuffering, totalImpressions) => totalBuffering / totalImpressions,
     type: 'percentage',
+    info: 'The percentage of video impressions which needed to rebuffer during playback'
   },
   {
     label: 'Median Buffering Time',
     dimension: 'BUFFERED',
     aggregation: 'median',
     filters: [['BUFFERED', 'GT', 0]],
-    type: 'time'
+    type: 'time',
+    info: 'How a typical rebuffering took'
   },
 ];
 
@@ -129,7 +153,8 @@ const seekTimeQueries = [
     dimension: 'SEEKED',
     aggregation: 'avg',
     filters: [['SEEKED', 'GT', 0]],
-    type: 'time'
+    type: 'time',
+    info: 'The average time it took after the user seeked in a video until it started playing again'
   },
   {
     label: 'Seek percentage',
@@ -145,6 +170,7 @@ const seekTimeQueries = [
     ],
     combineQueries: (totalSeeks, totalImpressions) => totalSeeks / totalImpressions,
     type: 'percentage',
+    info: 'The percentage of video impressions in which the viewers seeked'
   },
 ]
 
