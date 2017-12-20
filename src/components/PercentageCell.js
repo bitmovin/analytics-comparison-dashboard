@@ -4,7 +4,7 @@ import ComparisonTableCell from './ComparisonTableCell.js';
 export default function PercentageCell(props) {
   return (
     <ComparisonTableCell {...props} best="lowest" className="PercentageCell">
-      {(props.value * 100).toFixed()}%
+      {(props.value * 100).toFixed(1)}%
     </ComparisonTableCell>
   );
 }

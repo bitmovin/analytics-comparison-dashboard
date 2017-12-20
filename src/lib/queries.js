@@ -123,11 +123,37 @@ const errorQueries = [
   },
 ];
 
+const seekTimeQueries = [
+  {
+    label: 'Average Seek Time',
+    dimension: 'SEEKED',
+    aggregation: 'avg',
+    filters: [['SEEKED', 'GT', 0]],
+    type: 'time'
+  },
+  {
+    label: 'Seek percentage',
+    dimension: 'IMPRESSION_ID',
+    aggregation: 'count',
+    queries: [
+      {
+        filters: [['SEEKED', 'GT', 0]],
+      },
+      {
+        // just perform main query without any additions
+      }
+    ],
+    combineQueries: (totalSeeks, totalImpressions) => totalSeeks / totalImpressions,
+    type: 'percentage',
+  },
+]
+
 const queryGroups = [
   { label: 'Impressions', queries: impressionQueries },
   { label: 'Startup times', queries: startupTimeQueries },
   { label: 'Quality', queries: quality },
   { label: 'Problems', queries: errorQueries },
+  { label: 'Seek times', queries: seekTimeQueries },
 ]
 
 export default queryGroups;
