@@ -4,6 +4,8 @@ const countries = countryList();
 
 export const attributeValue = (attribute, value) => {
   switch (attribute) {
+    case 'IS_LIVE':
+      return value ? 'True' : 'False';
     case 'COUNTRY':
       return countries.getName(value) || 'Unknown';
     default:
