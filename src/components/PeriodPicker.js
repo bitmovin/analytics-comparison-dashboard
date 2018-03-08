@@ -13,17 +13,10 @@ export default class PeriodPicker extends Component {
     currentLabel: initialPeriod.label,
   }
 
-  handleDateChange = (attr) => (dateMoment) => {
-    const { fromDate, toDate, onChange } = this.props;
-    const update = { [attr]: dateMoment.toDate() };
-    onChange({ fromDate, toDate, ...update });
-    this.setState({ currentLabel: `${moment(fromDate).format('L')} – ${moment(toDate).format('L')}`})
-  }
-
-  selectRange = (label) => {
-    const range = periods.find(r => r.label === label);
-    this.props.onChange({ fromDate: range.fromDate(), toDate: range.toDate() });
-    this.setState({ currentLabel: range.label });
+  onChange = ({ fromDate, toDate, label }) => {
+    this.props.onChange({ fromDate, toDate });
+    const currentLabel = label || `${moment(fromDate).format('L')} – ${moment(toDate).format('L')}`;
+    this.setState({ currentLabel });
   }
 
   render() {
@@ -36,9 +29,7 @@ export default class PeriodPicker extends Component {
           fromDate={fromDate}
           toDate={toDate}
           currentLabel={currentLabel}
-          onFromDateChange={this.handleDateChange('fromDate')}
-          onToDateChange={this.handleDateChange('toDate')}
-          selectRange={this.selectRange}
+          onChange={this.onChange}
         />
       </Popover>
     );

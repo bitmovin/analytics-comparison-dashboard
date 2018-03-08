@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import AddColumnSelect from './AddColumnSelect';
-import PeriodPicker from './PeriodPicker';
+import PeriodSelection from './PeriodSelection';
 
 export default class AddColumnModal extends Component {
   state = {
@@ -40,7 +40,7 @@ export default class AddColumnModal extends Component {
         />
       );
       case 'period': return (
-        <PeriodPicker />
+        <PeriodSelection />
       )
       default: throw new Error(`Unknown modal type: '${type}'`);
     }
