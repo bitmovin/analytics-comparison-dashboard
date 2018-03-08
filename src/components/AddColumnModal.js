@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import AddColumnSelect from './AddColumnSelect';
+import PeriodPicker from './PeriodPicker';
 
 export default class AddColumnModal extends Component {
   state = {
@@ -26,8 +27,27 @@ export default class AddColumnModal extends Component {
     this.setDefaultColumnKey(this.props);
   }
 
+  body = () => {
+    const { type, comparableName, options } = this.props;
+
+    switch(type) {
+      case 'list': return (
+        <AddColumnSelect
+          comparableName={comparableName}
+          columnKey={this.state.columnKey}
+          onChange={this.onChange}
+          options={options}
+        />
+      );
+      case 'period': return (
+        <PeriodPicker />
+      )
+      default: throw new Error(`Unknown modal type: '${type}'`);
+    }
+  }
+
   render() {
-    const { show, onHide, comparableName, options } = this.props;
+    const { show, onHide, comparableName } = this.props;
 
     return (
       <Modal show={show} onHide={onHide} className="AddColumnModal">
@@ -35,12 +55,7 @@ export default class AddColumnModal extends Component {
           <Modal.Title>Add a {comparableName}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <AddColumnSelect
-            comparableName={comparableName}
-            columnKey={this.state.columnKey}
-            onChange={this.onChange}
-            options={options}
-          />
+          {this.body()}
         </Modal.Body>
         <Modal.Footer>
           <Button bsStyle="primary" onClick={this.handleSubmit}>Add</Button>
