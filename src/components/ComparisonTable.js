@@ -36,10 +36,11 @@ export default class ComparisonTable extends Component {
     console.log(comparableKey);
     switch(comparableKey) {
       case 'PERIOD': {
+        const periodString = (from, to) =>
+          [from, to].map(date => date.toISOString().slice(0, 10)).join(' – ');
         const { fromDate, toDate } = this.props;
-        const formattedDates = [fromDate, toDate].map(date =>
-          date.toISOString().slice(0, 10));
-        return [formattedDates.join(' – ')];
+        const secondPeriodFromDate = new Date(fromDate - (toDate - fromDate));
+        return [periodString(fromDate, toDate), periodString(secondPeriodFromDate, fromDate)];
       }
       default: {
         const values = await this.fetchAttributeValues(comparableKey);
