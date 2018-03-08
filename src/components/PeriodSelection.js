@@ -34,21 +34,15 @@ export const periods = Object.freeze([
 ]);
 
 export default class PeriodSelection extends Component {
-  state = {
-    currentLabel: null,
-  };
-
   selectRange = (label) => {
     const range = periods.find(r => r.label === label);
     this.props.onChange({ fromDate: range.fromDate(), toDate: range.toDate(), label });
-    this.setState({ currentLabel: range.label });
   };
 
   handleDateChange = (attr) => (dateMoment) => {
     const { fromDate, toDate, onChange } = this.props;
     const update = { [attr]: dateMoment.toDate() };
     onChange({ fromDate, toDate, label: null, ...update });
-    this.setState({ currentLabel: null });
   }
 
   render() {
