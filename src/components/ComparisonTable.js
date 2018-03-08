@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Table } from 'react-bootstrap';
 import ComparableSelect, { initialComparableKey, getSingleName } from './ComparableSelect.js';
-import RemoveButton from './RemoveButton.js';
 import AddColumnButton from './AddColumnButton.js';
 import ComparisonTableBody from './ComparisonTableBody.js';
+import ComparisonTableHeader from './ComparisonTableHeader.js';
 import { attributeValue, fetchAttributeRows } from '../lib/helpers.js';
 import queryGroups from '../lib/queries.js';
 import './ComparisonTable.css';
@@ -33,7 +33,6 @@ export default class ComparisonTable extends Component {
   }
 
   initialColumnKeys = async (comparableKey) => {
-    console.log(comparableKey);
     switch(comparableKey) {
       case 'PERIOD': {
         const periodString = (from, to) =>
@@ -95,16 +94,12 @@ export default class ComparisonTable extends Component {
                 />
               </th>
               {selectedColumnKeys.map((columnKey, index) =>
-                <th key={`header-${columnKey}`}>
-                  <div className="headerContainer">
-                    <RemoveButton
-                      id={`${columnKey}ColumnRemoveButton`}
-                      tooltip={`Remove this ${comparableName}.`}
-                      onClick={this.removeColumn(columnKey)}
-                    />
-                    {attributeValue(currentComparableKey, columnKey)}
-                  </div>
-                </th>
+                <ComparisonTableHeader
+                  key={`header-${columnKey}`}
+                  columnKey={columnKey}
+                  comparableKey={currentComparableKey}
+                  onRemove={this.removeColumn(columnKey)}
+                />
               )}
               <th>
                 <AddColumnButton
