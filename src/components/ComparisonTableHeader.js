@@ -3,8 +3,9 @@ import RemoveButton from './RemoveButton.js';
 import { getSingleName } from './ComparableSelect.js';
 import { attributeValue } from '../lib/helpers.js';
 
-export default ({ columnKey, comparableKey, onRemove }) => {
+export default ({ columnKey, comparableKey, onRemove, index }) => {
   const comparableName = getSingleName(comparableKey);
+  const isNotRemovable = comparableKey === 'PERIOD' && index === 0;
 
   return (
     <th>
@@ -13,6 +14,7 @@ export default ({ columnKey, comparableKey, onRemove }) => {
           id={`${columnKey}ColumnRemoveButton`}
           tooltip={`Remove this ${comparableName}.`}
           onClick={onRemove}
+          disabled={isNotRemovable}
         />
         {attributeValue(comparableKey, columnKey)}
       </div>

@@ -99,6 +99,7 @@ export default class ComparisonTable extends Component {
                   columnKey={columnKey}
                   comparableKey={currentComparableKey}
                   onRemove={this.removeColumn(columnKey)}
+                  index={index}
                 />
               )}
               <th>
