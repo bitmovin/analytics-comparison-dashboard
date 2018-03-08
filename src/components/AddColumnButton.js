@@ -33,9 +33,9 @@ export default class AddColumnButton extends Component {
   }
 
   render() {
-    const { comparableName, onAdd, disabled } = this.props;
+    const { comparableName, onAdd, disabled, type } = this.props;
     const { options, showAddColumnModal } = this.state;
-    const noMoreOptions = options.length === 0;
+    const noMoreOptions = type === 'list' && options.length === 0;
 
     return (
       <div className="AddColumnButton">
@@ -54,6 +54,7 @@ export default class AddColumnButton extends Component {
           onHide={this.hideAddColumnModal}
           options={options}
           comparableName={comparableName}
+          type={type}
         />
       </div>
     );

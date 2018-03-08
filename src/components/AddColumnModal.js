@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Button, FormGroup, FormControl, Modal } from 'react-bootstrap';
+import { Button, Modal } from 'react-bootstrap';
+import AddColumnSelect from './AddColumnSelect';
 
 export default class AddColumnModal extends Component {
   state = {
@@ -34,18 +35,12 @@ export default class AddColumnModal extends Component {
           <Modal.Title>Add a {comparableName}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <FormGroup controlId="addColunmSelect">
-            <FormControl
-              componentClass="select"
-              placeholder={comparableName}
-              value={this.state.columnKey}
-              onChange={this.onChange}
-            >
-              {options.map(({ key, name }) =>
-                <option value={key} key={key}>{name}</option>
-              )}
-            </FormControl>
-          </FormGroup>
+          <AddColumnSelect
+            comparableName={comparableName}
+            columnKey={this.state.columnKey}
+            onChange={this.onChange}
+            options={options}
+          />
         </Modal.Body>
         <Modal.Footer>
           <Button bsStyle="primary" onClick={this.handleSubmit}>Add</Button>

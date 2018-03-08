@@ -80,6 +80,7 @@ export default class ComparisonTable extends Component {
     const { fromDate, toDate, licenseKey, queryBuilder, filters } = this.props;
     const { selectedColumnKeys, currentComparableKey, isLoading } = this.state;
     const comparableName = getSingleName(currentComparableKey);
+    const addType = currentComparableKey === 'PERIOD' ? 'period' : 'list';
 
     return (
       <div className="ComparisonTable">
@@ -108,6 +109,7 @@ export default class ComparisonTable extends Component {
                   onAdd={this.addColumn}
                   disabled={isLoading}
                   optionsPromise={this.availableAddColumnOptions()}
+                  type={addType}
                 />
               </th>
             </tr>
