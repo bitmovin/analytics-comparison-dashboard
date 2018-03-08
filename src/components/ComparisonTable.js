@@ -25,13 +25,27 @@ export default class ComparisonTable extends Component {
   }
 
   fetchAttributeValues = async (attribute) => {
+    if (this.state.currentComparableKey === 'PERIOD') {
+      return [];
+    }
     const rows = await fetchAttributeRows({ ...this.props, attribute });
     return rows.sort((a, b) => b[1] - a[1]).map(row => row[0]);
   }
 
   initialColumnKeys = async (comparableKey) => {
-    const values = await this.fetchAttributeValues(comparableKey);
-    return values.slice(0, 3);
+    console.log(comparableKey);
+    switch(comparableKey) {
+      case 'PERIOD': {
+        const { fromDate, toDate } = this.props;
+        const formattedDates = [fromDate, toDate].map(date =>
+          date.toISOString().slice(0, 10));
+        return [formattedDates.join(' – ')];
+      }
+      default: {
+        const values = await this.fetchAttributeValues(comparableKey);
+        return values.slice(0, 3);
+      }
+    }
   }
 
   addColumn = (key) => {

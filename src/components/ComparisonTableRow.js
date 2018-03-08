@@ -36,14 +36,30 @@ export default class ComparisonTableRow extends Component {
     const { aggregation, dimension, aggregationParam, licenseKey, fromDate, toDate,
       comparableKey, filters } = query;
 
-    const baseQuery = queryBuilder[aggregation](dimension, aggregationParam)
-      .licenseKey(licenseKey)
-      .between(fromDate, toDate)
-      .filter(comparableKey, 'EQ', columnKey)
-    const filteredQuery = filters.reduce((q, filterParams) => q.filter(...filterParams), baseQuery);
-    const { rows } = await filteredQuery.query();
+    switch(comparableKey) {
+      case 'PERIOD': {
+        const [columnFromDate, columnToDate] = columnKey
+          .split(' – ')
+          .map(dateStr => Date.parse(dateStr));
+        const baseQuery = queryBuilder[aggregation](dimension, aggregationParam)
+          .licenseKey(licenseKey)
+          .between(columnFromDate, columnToDate)
+        const filteredQuery = filters.reduce((q, filterParams) => q.filter(...filterParams), baseQuery);
+        const { rows } = await filteredQuery.query();
 
-    return rows[0] ? rows[0][0] : null;
+        return rows[0] ? rows[0][0] : null;
+      }
+      default: {
+        const baseQuery = queryBuilder[aggregation](dimension, aggregationParam)
+          .licenseKey(licenseKey)
+          .between(fromDate, toDate)
+          .filter(comparableKey, 'EQ', columnKey)
+        const filteredQuery = filters.reduce((q, filterParams) => q.filter(...filterParams), baseQuery);
+        const { rows } = await filteredQuery.query();
+
+        return rows[0] ? rows[0][0] : null;
+      }
+    }
   }
 
   resolveQuery = async ({ columnKey, query, queryBuilder }) => {
