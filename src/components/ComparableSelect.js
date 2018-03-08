@@ -28,7 +28,6 @@ export default class ComparableSelect extends Component {
         >
           {comparableAttributes.map(({ collectionName, attribute }) =>
             <option value={attribute} key={attribute}>{collectionName}</option>)}
-          <option value="PERIOD" key="PERIOD">Periods</option>
         </FormControl>
       </FormGroup>
     );
