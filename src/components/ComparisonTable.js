@@ -6,7 +6,7 @@ import ComparisonTableBody from './ComparisonTableBody.js';
 import ComparisonTableHeader from './ComparisonTableHeader.js';
 import ColumnConfig from './column_configs/ColumnConfig.js';
 import PeriodColumnConfig from './column_configs/PeriodColumnConfig.js';
-import { attributeValue, fetchAttributeRows } from '../lib/helpers.js';
+import { fetchAttributeRows } from '../lib/helpers.js';
 import queryGroups from '../lib/queries.js';
 import './ComparisonTable.css';
 
@@ -80,7 +80,8 @@ export default class ComparisonTable extends Component {
   addColumnOptions = async () => {
     const { currentComparableKey } = this.state;
     const values = await this.fetchAttributeValues(currentComparableKey);
-    return values.map(key => ({ key, name: attributeValue(currentComparableKey, key) }));
+    const configs = values.map(key => ColumnConfig.for(currentComparableKey, { key }));
+    return configs.map(config => ({ key: config.key, name: config.label }));
   }
 
   availableAddColumnOptions = async () => {
