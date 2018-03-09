@@ -55,7 +55,7 @@ export default class ComparisonTable extends Component {
       }
       default: {
         const values = await this.fetchAttributeValues(comparableKey);
-        return values.slice(0, 3).map(key => new ColumnConfig({ key }));
+        return values.slice(0, 3).map(key => new ColumnConfig.for(comparableKey, { key }));
       }
     }
   }
@@ -107,12 +107,12 @@ export default class ComparisonTable extends Component {
                   disabled={isLoading}
                 />
               </th>
-              {this.columnConfigs().map(c => c.key).map((columnKey, index) =>
+              {this.columnConfigs().map((columnConfig, index) =>
                 <ComparisonTableHeader
-                  key={`header-${columnKey}`}
-                  columnKey={columnKey}
+                  key={`header-${columnConfig.key}`}
+                  columnConfig={columnConfig}
                   comparableKey={currentComparableKey}
-                  onRemove={this.removeColumn(columnKey)}
+                  onRemove={this.removeColumn(columnConfig.key)}
                   index={index}
                 />
               )}

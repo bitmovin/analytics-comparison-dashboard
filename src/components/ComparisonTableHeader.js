@@ -1,9 +1,8 @@
 import React from 'react';
 import RemoveButton from './RemoveButton.js';
 import { getSingleName } from './ComparableSelect.js';
-import { attributeValue } from '../lib/helpers.js';
 
-export default ({ columnKey, comparableKey, onRemove, index }) => {
+export default ({ columnConfig, comparableKey, onRemove, index }) => {
   const comparableName = getSingleName(comparableKey);
   const isNotRemovable = comparableKey === 'PERIOD' && index === 0;
 
@@ -11,12 +10,12 @@ export default ({ columnKey, comparableKey, onRemove, index }) => {
     <th>
       <div className="headerContainer">
         <RemoveButton
-          id={`${columnKey}ColumnRemoveButton`}
+          id={`${columnConfig.key}ColumnRemoveButton`}
           tooltip={`Remove this ${comparableName}.`}
           onClick={onRemove}
           disabled={isNotRemovable}
         />
-        {attributeValue(comparableKey, columnKey)}
+        {columnConfig.label}
       </div>
     </th>
   );
