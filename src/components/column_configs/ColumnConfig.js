@@ -17,6 +17,10 @@ export default class ColumnConfig {
         const CountryColumnConfig = require('./CountryColumnConfig.js').default;
         return new CountryColumnConfig(attrs);
       }
+      case 'PERIOD': {
+        const PeriodColumnConfig = require('./PeriodColumnConfig.js').default;
+        return new PeriodColumnConfig(attrs);
+      }
       default: return new ColumnConfig(attrs);
     }
   }

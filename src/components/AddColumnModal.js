@@ -8,8 +8,8 @@ import { getSingleName } from './ComparableSelect.js';
 export default class AddColumnModal extends Component {
   state = {
     columnKey: '',
-    fromDate: null,
-    toDate: null,
+    fromDate: new Date(),
+    toDate: new Date(),
     periodLabel: null,
   }
 
@@ -44,12 +44,13 @@ export default class AddColumnModal extends Component {
 
   body = () => {
     const { type, options } = this.props;
+    const { columnKey, fromDate, toDate } = this.state;
 
     switch(type) {
       case 'list': return (
         <AddColumnSelect
           comparableName={this.comparableName()}
-          columnKey={this.state.columnKey}
+          columnKey={columnKey}
           onChange={this.onSelectChange}
           options={options}
         />
@@ -57,6 +58,8 @@ export default class AddColumnModal extends Component {
       case 'period': return (
         <PeriodSelection
           onChange={this.onPeriodChange}
+          fromDate={fromDate}
+          toDate={toDate}
         />
       )
       default: throw new Error(`Unknown modal type: '${type}'`);
