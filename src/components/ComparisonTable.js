@@ -5,6 +5,7 @@ import AddColumnButton from './AddColumnButton.js';
 import ComparisonTableBody from './ComparisonTableBody.js';
 import ComparisonTableHeader from './ComparisonTableHeader.js';
 import ColumnConfig from './column_configs/ColumnConfig.js';
+import PeriodColumnConfig from './column_configs/PeriodColumnConfig.js';
 import { attributeValue, fetchAttributeRows } from '../lib/helpers.js';
 import queryGroups from '../lib/queries.js';
 import './ComparisonTable.css';
@@ -38,9 +39,7 @@ export default class ComparisonTable extends Component {
     switch (currentComparableKey) {
       case 'PERIOD': {
         const { fromDate, toDate } = this.props;
-        const mainPeriodKey = [fromDate, toDate]
-          .map(date => date.toISOString().slice(0, 10)).join(' – ');
-        const mainPeriodConfig = new ColumnConfig({ key: mainPeriodKey });
+        const mainPeriodConfig = new PeriodColumnConfig({ from: fromDate, to: toDate });
         return [mainPeriodConfig, ...selectedColumnConfigs];
       }
       default: return selectedColumnConfigs;
@@ -50,12 +49,9 @@ export default class ComparisonTable extends Component {
   initialColumnConfigs = async (comparableKey) => {
     switch(comparableKey) {
       case 'PERIOD': {
-        const periodString = (from, to) =>
-          [from, to].map(date => date.toISOString().slice(0, 10)).join(' – ');
         const { fromDate, toDate } = this.props;
         const secondPeriodFromDate = new Date(fromDate - (toDate - fromDate));
-        const secondPeriodConfig = new ColumnConfig({ key: periodString(secondPeriodFromDate, fromDate) });
-        return [secondPeriodConfig];
+        return [new PeriodColumnConfig({ from: secondPeriodFromDate, to: fromDate })];
       }
       default: {
         const values = await this.fetchAttributeValues(comparableKey);
