@@ -6,6 +6,9 @@ import PeriodSelection from './PeriodSelection';
 export default class AddColumnModal extends Component {
   state = {
     columnKey: '',
+    fromDate: null,
+    toDate: null,
+    periodLabel: null,
   }
 
   componentWillReceiveProps(newProps) {
@@ -17,8 +20,13 @@ export default class AddColumnModal extends Component {
     this.setState({ columnKey });
   }
 
-  onChange = (event) => {
+  onSelectChange = (event) => {
     this.setState({ columnKey: event.currentTarget.value });
+  }
+
+  onPeriodChange = ({ fromDate, toDate, label }) => {
+    const columnKey = [fromDate, toDate].map(date => date.toISOString().slice(0, 10)).join(' – ');
+    this.setState({ fromDate, toDate, label, columnKey });
   }
 
   handleSubmit = () => {
@@ -35,12 +43,14 @@ export default class AddColumnModal extends Component {
         <AddColumnSelect
           comparableName={comparableName}
           columnKey={this.state.columnKey}
-          onChange={this.onChange}
+          onChange={this.onSelectChange}
           options={options}
         />
       );
       case 'period': return (
-        <PeriodSelection />
+        <PeriodSelection
+          onChange={this.onPeriodChange}
+        />
       )
       default: throw new Error(`Unknown modal type: '${type}'`);
     }
