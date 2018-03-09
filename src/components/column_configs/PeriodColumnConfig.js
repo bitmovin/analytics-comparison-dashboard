@@ -2,7 +2,7 @@ import ColumnConfig from './ColumnConfig.js';
 
 export default class PeriodColumnConfig extends ColumnConfig {
   constructor({ from, to }) {
-    const key = [from, to].map(date => date.toISOString().slice(0, 10)).join(' – ');
+    const key = Math.random().toString(36).substr(2, 9);;
     super({ key })
     this.from = from;
     this.to = to;
