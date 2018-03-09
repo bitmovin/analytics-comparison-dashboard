@@ -27,7 +27,7 @@ export default class ComparisonTable extends Component {
   }
 
   fetchAttributeValues = async (attribute) => {
-    if (this.state.currentComparableKey === 'PERIOD') {
+    if (attribute === 'PERIOD') {
       return [];
     }
     const rows = await fetchAttributeRows({ ...this.props, attribute });
@@ -67,7 +67,7 @@ export default class ComparisonTable extends Component {
 
   handleComparableKeyChange = async (currentComparableKey) => {
     this.setState({ isLoading: true });
-    const selectedColumnConfigs = await this.initialColumnConfigs(currentComparableKey)
+    const selectedColumnConfigs = await this.initialColumnConfigs(currentComparableKey);
     this.setState({ currentComparableKey, selectedColumnConfigs, isLoading: false });
   }
 
