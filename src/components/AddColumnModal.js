@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import AddColumnSelect from './AddColumnSelect';
 import PeriodSelection from './PeriodSelection';
+import ColumnConfig from './column_configs/ColumnConfig';
+import { getSingleName } from './ComparableSelect.js';
 
 export default class AddColumnModal extends Component {
   state = {
@@ -30,18 +32,23 @@ export default class AddColumnModal extends Component {
   }
 
   handleSubmit = () => {
-    this.props.onAdd(this.state.columnKey);
+    const { comparableKey } = this.props;
+    const { columnKey: key, fromDate: from, toDate: to } = this.state;
+    const columnConfig = ColumnConfig.for(comparableKey, { key, from, to });
+    this.props.onAdd(columnConfig);
     this.props.onHide();
     this.setDefaultColumnKey(this.props);
   }
 
+  comparableName = () => getSingleName(this.props.comparableKey);
+
   body = () => {
-    const { type, comparableName, options } = this.props;
+    const { type, options } = this.props;
 
     switch(type) {
       case 'list': return (
         <AddColumnSelect
-          comparableName={comparableName}
+          comparableName={this.comparableName()}
           columnKey={this.state.columnKey}
           onChange={this.onSelectChange}
           options={options}
@@ -57,12 +64,12 @@ export default class AddColumnModal extends Component {
   }
 
   render() {
-    const { show, onHide, comparableName } = this.props;
+    const { show, onHide } = this.props;
 
     return (
       <Modal show={show} onHide={onHide} className="AddColumnModal">
         <Modal.Header closeButton>
-          <Modal.Title>Add a {comparableName}</Modal.Title>
+          <Modal.Title>Add a {this.comparableName()}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {this.body()}

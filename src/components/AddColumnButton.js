@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import SymbolButton from './SymbolButton.js';
 import AddColumnModal from './AddColumnModal.js';
+import { getSingleName } from './ComparableSelect.js';
 
 export default class AddColumnButton extends Component {
   state = {
@@ -33,9 +34,10 @@ export default class AddColumnButton extends Component {
   }
 
   render() {
-    const { comparableName, onAdd, disabled, type } = this.props;
+    const { comparableKey, onAdd, disabled, type } = this.props;
     const { options, showAddColumnModal } = this.state;
     const noMoreOptions = type === 'list' && options.length === 0;
+    const comparableName = getSingleName(comparableKey);
 
     return (
       <div className="AddColumnButton">
@@ -53,7 +55,7 @@ export default class AddColumnButton extends Component {
           show={showAddColumnModal}
           onHide={this.hideAddColumnModal}
           options={options}
-          comparableName={comparableName}
+          comparableKey={comparableKey}
           type={type}
         />
       </div>

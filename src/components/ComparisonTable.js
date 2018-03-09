@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Table } from 'react-bootstrap';
-import ComparableSelect, { initialComparableKey, getSingleName } from './ComparableSelect.js';
+import ComparableSelect, { initialComparableKey } from './ComparableSelect.js';
 import AddColumnButton from './AddColumnButton.js';
 import ComparisonTableBody from './ComparisonTableBody.js';
 import ComparisonTableHeader from './ComparisonTableHeader.js';
@@ -60,10 +60,9 @@ export default class ComparisonTable extends Component {
     }
   }
 
-  addColumn = (key) => {
-    const config = new ColumnConfig({ key });
-    const selectedColumnKeys = [...this.state.selectedColumnKeys, config];
-    this.setState({ selectedColumnKeys });
+  addColumn = (config) => {
+    const selectedColumnConfigs = [...this.state.selectedColumnConfigs, config];
+    this.setState({ selectedColumnConfigs });
   }
 
   handleComparableKeyChange = async (currentComparableKey) => {
@@ -80,8 +79,7 @@ export default class ComparisonTable extends Component {
   addColumnOptions = async () => {
     const { currentComparableKey } = this.state;
     const values = await this.fetchAttributeValues(currentComparableKey);
-    const configs = values.map(key => ColumnConfig.for(currentComparableKey, { key }));
-    return configs.map(config => ({ key: config.key, name: config.label }));
+    return values.map(key => ColumnConfig.for(currentComparableKey, { key }));
   }
 
   availableAddColumnOptions = async () => {
@@ -93,7 +91,6 @@ export default class ComparisonTable extends Component {
   render() {
     const { fromDate, toDate, licenseKey, queryBuilder, filters } = this.props;
     const { currentComparableKey, isLoading } = this.state;
-    const comparableName = getSingleName(currentComparableKey);
     const addType = currentComparableKey === 'PERIOD' ? 'period' : 'list';
 
     return (
@@ -119,7 +116,7 @@ export default class ComparisonTable extends Component {
               )}
               <th>
                 <AddColumnButton
-                  comparableName={comparableName}
+                  comparableKey={currentComparableKey}
                   onAdd={this.addColumn}
                   disabled={isLoading}
                   optionsPromise={this.availableAddColumnOptions()}

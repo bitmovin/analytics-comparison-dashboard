@@ -10,8 +10,8 @@ export default ({ comparableName, columnKey, onChange, options }) => {
         value={columnKey}
         onChange={onChange}
       >
-        {options.map(({ key, name }) =>
-          <option value={key} key={key}>{name}</option>
+        {options.map(({ key, label }) =>
+          <option value={key} key={key}>{label}</option>
         )}
       </FormControl>
     </FormGroup>
