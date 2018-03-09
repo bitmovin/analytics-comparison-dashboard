@@ -126,7 +126,7 @@ export default class ComparisonTable extends Component {
           {queryGroups.map(({ label, queries }) =>
             <ComparisonTableBody
               key={label}
-              selectedColumnKeys={this.columnConfigs().map(c => c.key)}
+              selectedColumnConfigs={this.columnConfigs()}
               comparableKey={currentComparableKey}
               fromDate={fromDate}
               toDate={toDate}
