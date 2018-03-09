@@ -32,6 +32,19 @@ export default class ComparisonTable extends Component {
     return rows.sort((a, b) => b[1] - a[1]).map(row => row[0]);
   }
 
+  columnKeys = () => {
+    const { selectedColumnKeys, currentComparableKey } = this.state;
+    switch (currentComparableKey) {
+      case 'PERIOD': {
+        const { fromDate, toDate } = this.props;
+        const mainPeriodKey = [fromDate, toDate]
+          .map(date => date.toISOString().slice(0, 10)).join(' – ');
+        return [mainPeriodKey, ...selectedColumnKeys];
+      }
+      default: return selectedColumnKeys;
+    }
+  }
+
   initialColumnKeys = async (comparableKey) => {
     switch(comparableKey) {
       case 'PERIOD': {
@@ -39,7 +52,7 @@ export default class ComparisonTable extends Component {
           [from, to].map(date => date.toISOString().slice(0, 10)).join(' – ');
         const { fromDate, toDate } = this.props;
         const secondPeriodFromDate = new Date(fromDate - (toDate - fromDate));
-        return [periodString(fromDate, toDate), periodString(secondPeriodFromDate, fromDate)];
+        return [periodString(secondPeriodFromDate, fromDate)];
       }
       default: {
         const values = await this.fetchAttributeValues(comparableKey);
@@ -78,7 +91,7 @@ export default class ComparisonTable extends Component {
 
   render() {
     const { fromDate, toDate, licenseKey, queryBuilder, filters } = this.props;
-    const { selectedColumnKeys, currentComparableKey, isLoading } = this.state;
+    const { currentComparableKey, isLoading } = this.state;
     const comparableName = getSingleName(currentComparableKey);
     const addType = currentComparableKey === 'PERIOD' ? 'period' : 'list';
 
@@ -94,7 +107,7 @@ export default class ComparisonTable extends Component {
                   disabled={isLoading}
                 />
               </th>
-              {selectedColumnKeys.map((columnKey, index) =>
+              {this.columnKeys().map((columnKey, index) =>
                 <ComparisonTableHeader
                   key={`header-${columnKey}`}
                   columnKey={columnKey}
@@ -117,7 +130,7 @@ export default class ComparisonTable extends Component {
           {queryGroups.map(({ label, queries }) =>
             <ComparisonTableBody
               key={label}
-              selectedColumnKeys={selectedColumnKeys}
+              selectedColumnKeys={this.columnKeys()}
               comparableKey={currentComparableKey}
               fromDate={fromDate}
               toDate={toDate}
