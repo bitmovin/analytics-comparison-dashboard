@@ -34,8 +34,9 @@ export default class AddColumnButton extends Component {
   }
 
   render() {
-    const { comparableKey, onAdd, disabled, type } = this.props;
+    const { comparableKey, onAdd, disabled } = this.props;
     const { options, showAddColumnModal } = this.state;
+    const type = comparableKey === 'PERIOD' ? 'period' : 'list';
     const noMoreOptions = type === 'list' && options.length === 0;
     const comparableName = getSingleName(comparableKey);
 
