@@ -4,24 +4,25 @@ import ComparableSelect, { initialComparableKey, getSingleName } from './Compara
 import AddColumnButton from './AddColumnButton.js';
 import ComparisonTableBody from './ComparisonTableBody.js';
 import ComparisonTableHeader from './ComparisonTableHeader.js';
+import ColumnConfig from './column_configs/ColumnConfig.js';
 import { attributeValue, fetchAttributeRows } from '../lib/helpers.js';
 import queryGroups from '../lib/queries.js';
 import './ComparisonTable.css';
 
 export default class ComparisonTable extends Component {
   state = {
-    selectedColumnKeys: [],
+    selectedColumnConfigs: [],
     currentComparableKey: initialComparableKey,
     isLoading: true,
   }
 
   componentDidMount() {
-    this.setInitialColumnKeys();
+    this.setInitialColumnConfigs();
   }
 
-  setInitialColumnKeys = async () => {
-    const selectedColumnKeys = await this.initialColumnKeys(this.state.currentComparableKey)
-    this.setState({ selectedColumnKeys, isLoading: false });
+  setInitialColumnConfigs = async () => {
+    const selectedColumnConfigs = await this.initialColumnConfigs(this.state.currentComparableKey)
+    this.setState({ selectedColumnConfigs, isLoading: false });
   }
 
   fetchAttributeValues = async (attribute) => {
@@ -32,49 +33,52 @@ export default class ComparisonTable extends Component {
     return rows.sort((a, b) => b[1] - a[1]).map(row => row[0]);
   }
 
-  columnKeys = () => {
-    const { selectedColumnKeys, currentComparableKey } = this.state;
+  columnConfigs = () => {
+    const { selectedColumnConfigs, currentComparableKey } = this.state;
     switch (currentComparableKey) {
       case 'PERIOD': {
         const { fromDate, toDate } = this.props;
         const mainPeriodKey = [fromDate, toDate]
           .map(date => date.toISOString().slice(0, 10)).join(' – ');
-        return [mainPeriodKey, ...selectedColumnKeys];
+        const mainPeriodConfig = new ColumnConfig({ key: mainPeriodKey });
+        return [mainPeriodConfig, ...selectedColumnConfigs];
       }
-      default: return selectedColumnKeys;
+      default: return selectedColumnConfigs;
     }
   }
 
-  initialColumnKeys = async (comparableKey) => {
+  initialColumnConfigs = async (comparableKey) => {
     switch(comparableKey) {
       case 'PERIOD': {
         const periodString = (from, to) =>
           [from, to].map(date => date.toISOString().slice(0, 10)).join(' – ');
         const { fromDate, toDate } = this.props;
         const secondPeriodFromDate = new Date(fromDate - (toDate - fromDate));
-        return [periodString(secondPeriodFromDate, fromDate)];
+        const secondPeriodConfig = new ColumnConfig({ key: periodString(secondPeriodFromDate, fromDate) });
+        return [secondPeriodConfig];
       }
       default: {
         const values = await this.fetchAttributeValues(comparableKey);
-        return values.slice(0, 3);
+        return values.slice(0, 3).map(key => new ColumnConfig({ key }));
       }
     }
   }
 
   addColumn = (key) => {
-    const selectedColumnKeys = [...this.state.selectedColumnKeys, key];
+    const config = new ColumnConfig({ key });
+    const selectedColumnKeys = [...this.state.selectedColumnKeys, config];
     this.setState({ selectedColumnKeys });
   }
 
   handleComparableKeyChange = async (currentComparableKey) => {
     this.setState({ isLoading: true });
-    const selectedColumnKeys = await this.initialColumnKeys(currentComparableKey)
-    this.setState({ currentComparableKey, selectedColumnKeys, isLoading: false });
+    const selectedColumnConfigs = await this.initialColumnConfigs(currentComparableKey)
+    this.setState({ currentComparableKey, selectedColumnConfigs, isLoading: false });
   }
 
   removeColumn = (columnKey) => () => {
-    const selectedColumnKeys = this.state.selectedColumnKeys.filter(c => c !== columnKey);
-    this.setState({ selectedColumnKeys });
+    const selectedColumnConfigs = this.state.selectedColumnConfigs.filter(c => c.key !== columnKey);
+    this.setState({ selectedColumnConfigs });
   }
 
   addColumnOptions = async () => {
@@ -84,9 +88,9 @@ export default class ComparisonTable extends Component {
   }
 
   availableAddColumnOptions = async () => {
-    const { selectedColumnKeys } = this.state;
+    const { selectedColumnConfigs } = this.state;
     const options = await this.addColumnOptions();
-    return options.filter(o => !selectedColumnKeys.includes(o.key))
+    return options.filter(o => !selectedColumnConfigs.map(c => c.key).includes(o.key))
   }
 
   render() {
@@ -107,7 +111,7 @@ export default class ComparisonTable extends Component {
                   disabled={isLoading}
                 />
               </th>
-              {this.columnKeys().map((columnKey, index) =>
+              {this.columnConfigs().map(c => c.key).map((columnKey, index) =>
                 <ComparisonTableHeader
                   key={`header-${columnKey}`}
                   columnKey={columnKey}
@@ -130,7 +134,7 @@ export default class ComparisonTable extends Component {
           {queryGroups.map(({ label, queries }) =>
             <ComparisonTableBody
               key={label}
-              selectedColumnKeys={this.columnKeys()}
+              selectedColumnKeys={this.columnConfigs().map(c => c.key)}
               comparableKey={currentComparableKey}
               fromDate={fromDate}
               toDate={toDate}
