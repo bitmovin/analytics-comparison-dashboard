@@ -151,8 +151,8 @@ const errorQueries = [
 const seekTimeQueries = [
   {
     label: 'Average Seek Time',
-    dimension: 'SEEKED',
-    aggregation: 'avg',
+    dimension: 'DURATION',
+    aggregation: 'median',
     filters: [['SEEKED', 'GT', 0]],
     type: 'time',
     info: 'The average time it took after the user seeked in a video until it started playing again'
