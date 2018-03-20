@@ -130,6 +130,7 @@ const errorQueries = [
         filters: [['BUFFERED', 'GT', 0]],
       },
       {
+        filters: [['VIDEO_STARTUPTIME', 'GT', 0]],
         // just perform main query without any additions
       }
     ],
