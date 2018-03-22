@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
 import RemoveButton from './RemoveButton.js';
+import ColumnConfig from './column_configs/ColumnConfig.js';
 import { allAttributes } from '../lib/attributes.js';
-import { attributeValue, fetchAttributeRows } from '../lib/helpers.js';
+import { fetchAttributeRows } from '../lib/helpers.js';
 import './Filter.css';
 
 export default class Filter extends Component {
@@ -57,7 +58,7 @@ export default class Filter extends Component {
           disabled={isLoading}
         >
           {filterOptions.map((option) =>
-            <option value={option} key={option}>{attributeValue(attribute, option)}</option>)}
+            <option value={option} key={option}>{ColumnConfig.for(attribute, { key: option }).label}</option>)}
         </FormControl>
       </FormGroup>
     )

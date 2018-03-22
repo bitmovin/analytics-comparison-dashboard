@@ -1,18 +1,3 @@
-import countryList from 'country-list';
-
-const countries = countryList();
-
-export const attributeValue = (attribute, value) => {
-  switch (attribute) {
-    case 'IS_LIVE':
-      return value ? 'True' : 'False';
-    case 'COUNTRY':
-      return countries.getName(value) || 'Unknown';
-    default:
-      return value || 'None';
-  }
-};
-
 export const fetchAttributeRows = async ({ queryBuilder, licenseKey, fromDate, toDate, attribute }) => {
   const { rows } = await queryBuilder
     .count('IMPRESSION_ID')

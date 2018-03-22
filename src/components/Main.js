@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Bitmovin from 'bitmovin-javascript';
 import { Panel } from 'react-bootstrap';
-import PeriodSelection, { initialPeriod } from './PeriodSelection.js';
+import PeriodPicker, { initialPeriod } from './PeriodPicker.js';
 import ComparisonTable from './ComparisonTable.js';
 import LicenseKeySelect from './LicenseKeySelect.js';
 import Filters from './Filters.js';
@@ -74,7 +74,7 @@ export default class Main extends Component {
           <form>
             <div className="Main-titleRow">
               <h1>Compare</h1>
-              <PeriodSelection fromDate={fromDate} toDate={toDate} onChange={this.handleDateRangeChange}/>
+              <PeriodPicker fromDate={fromDate} toDate={toDate} onChange={this.handleDateRangeChange}/>
             </div>
             <Filters
               onAdd={this.handleFilterAdd}

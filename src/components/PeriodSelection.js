@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-import DatePicker from 'react-datepicker';
-import { Button, ToggleButton, ToggleButtonGroup, OverlayTrigger, Popover, FormGroup, ControlLabel }
+import { ToggleButton, ToggleButtonGroup, FormGroup, ControlLabel }
   from 'react-bootstrap';
+import DatePicker from 'react-datepicker';
 import moment from 'moment';
-import 'react-datepicker/dist/react-datepicker.css';
 import './PeriodSelection.css';
 
-const periods = Object.freeze([
+export const periods = Object.freeze([
   Object.freeze({
     label: 'Today',
     fromDate: () => moment().startOf('day').toDate(),
@@ -34,33 +33,24 @@ const periods = Object.freeze([
   }),
 ]);
 
-export const initialPeriod = periods[2];
-
 export default class PeriodSelection extends Component {
-  state = {
-    currentLabel: initialPeriod.label,
-  }
+  selectRange = (label) => {
+    const range = periods.find(r => r.label === label);
+    this.props.onChange({ fromDate: range.fromDate(), toDate: range.toDate(), label });
+  };
 
   handleDateChange = (attr) => (dateMoment) => {
     const { fromDate, toDate, onChange } = this.props;
     const update = { [attr]: dateMoment.toDate() };
-    onChange({ fromDate, toDate, ...update });
-    this.setState({ currentLabel: `${moment(fromDate).format('L')} – ${moment(toDate).format('L')}`})
-  }
-
-  selectRange = (label) => {
-    const range = periods.find(r => r.label === label);
-    this.props.onChange({ fromDate: range.fromDate(), toDate: range.toDate() });
-    this.setState({ currentLabel: range.label });
+    onChange({ fromDate, toDate, label: null, ...update });
   }
 
   render() {
-    const { fromDate, toDate } = this.props;
+    const { fromDate, toDate, currentLabel } = this.props;
     const [fromMoment, toMoment] = [fromDate, toDate].map(d => moment(d));
-    const { currentLabel } = this.state;
 
-    const periodPopover = (
-      <Popover id="PeriodSelection" className="PeriodSelection">
+    return (
+      <div className="PeriodSelection">
         <div className="PeriodSelection-dateSelection">
           <FormGroup controlId="PeriodSelection-fromDate">
             <ControlLabel>From</ControlLabel>
@@ -95,15 +85,7 @@ export default class PeriodSelection extends Component {
           {periods.map(({ label }) =>
             <ToggleButton key={label} value={label}>{label}</ToggleButton>)}
         </ToggleButtonGroup>
-      </Popover>
-    );
-
-    return (
-      <div>
-        <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={periodPopover}>
-          <Button>{currentLabel}</Button>
-        </OverlayTrigger>
       </div>
-    );
+    )
   }
 }

@@ -1,14 +1,14 @@
 import React from 'react';
 import { DropdownButton, MenuItem } from 'react-bootstrap';
 import Filter from './Filter.js'
-import { allAttributes } from '../lib/attributes.js';
+import { filterableAttributes } from '../lib/attributes.js';
 import './Filters.css';
 
 export default function Filters ({ onAdd, onUpdate, onRemove, filters, queryBuilder, licenseKey, fromDate, toDate }) {
   const updateFilter = (attribute) => (value) => onUpdate({ attribute, value });
   const removeFilter = (attribute) => () => onRemove(attribute);
   const existingFilterNames = filters.map(f => f.attribute);
-  const unusedFilterItems = allAttributes.filter(i => !existingFilterNames.includes(i.attribute));
+  const unusedFilterItems = filterableAttributes.filter(i => !existingFilterNames.includes(i.attribute));
   const noMoreFilters = unusedFilterItems.length === 0;
 
   return (

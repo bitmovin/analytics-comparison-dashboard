@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import SymbolButton from './SymbolButton.js';
 import AddColumnModal from './AddColumnModal.js';
+import { getSingleName } from './ComparableSelect.js';
 
 export default class AddColumnButton extends Component {
   state = {
@@ -33,9 +34,11 @@ export default class AddColumnButton extends Component {
   }
 
   render() {
-    const { comparableName, onAdd, disabled } = this.props;
+    const { comparableKey, onAdd, disabled } = this.props;
     const { options, showAddColumnModal } = this.state;
-    const noMoreOptions = options.length === 0;
+    const type = comparableKey === 'PERIOD' ? 'period' : 'list';
+    const noMoreOptions = type === 'list' && options.length === 0;
+    const comparableName = getSingleName(comparableKey);
 
     return (
       <div className="AddColumnButton">
@@ -53,7 +56,8 @@ export default class AddColumnButton extends Component {
           show={showAddColumnModal}
           onHide={this.hideAddColumnModal}
           options={options}
-          comparableName={comparableName}
+          comparableKey={comparableKey}
+          type={type}
         />
       </div>
     );

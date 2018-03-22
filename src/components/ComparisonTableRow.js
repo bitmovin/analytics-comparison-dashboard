@@ -32,38 +32,47 @@ export default class ComparisonTableRow extends Component {
     this.fetchAnalytics(newProps);
   }
 
-  fetchQueryResult = async ({ query, columnKey, queryBuilder }) => {
+  fetchQueryResult = async ({ query, columnConfig, queryBuilder }) => {
     const { aggregation, dimension, aggregationParam, licenseKey, fromDate, toDate,
       comparableKey, filters } = query;
 
-    const baseQuery = queryBuilder[aggregation](dimension, aggregationParam)
+    let baseQuery = queryBuilder[aggregation](dimension, aggregationParam)
       .licenseKey(licenseKey)
-      .between(fromDate, toDate)
-      .filter(comparableKey, 'EQ', columnKey)
+
+    switch(comparableKey) {
+      case 'PERIOD':
+        baseQuery = baseQuery.between(columnConfig.from, columnConfig.to);
+        break;
+      default:
+        baseQuery = baseQuery
+          .between(fromDate, toDate)
+          .filter(comparableKey, 'EQ', columnConfig.key);
+    }
+
     const filteredQuery = filters.reduce((q, filterParams) => q.filter(...filterParams), baseQuery);
     const { rows } = await filteredQuery.query();
 
     return rows[0] ? rows[0][0] : null;
   }
 
-  resolveQuery = async ({ columnKey, query, queryBuilder }) => {
+  resolveQuery = async ({ columnConfig, query, queryBuilder }) => {
     const { combineQueries, queries, filters } = query;
 
     if (combineQueries) {
       const runningQueries = queries
         .map(subQuery => ({ ...query, ...subQuery, filters: [...filters, ...(subQuery.filters || [])] }))
-        .map(subQuery => this.fetchQueryResult({ query: subQuery, columnKey, queryBuilder }));
+        .map(subQuery => this.fetchQueryResult({ query: subQuery, columnConfig, queryBuilder }));
       const results = await Promise.all(runningQueries);
 
       return combineQueries(...results)
     }
 
-    return await this.fetchQueryResult({ query, columnKey, queryBuilder });
+    return await this.fetchQueryResult({ query, columnConfig, queryBuilder });
   }
 
-  fetchAnalytics = async ({ query, columnKeys, queryBuilder }) => {
-      const runningQueries = columnKeys
-        .map(columnKey => this.resolveQuery({ columnKey, query, queryBuilder }));
+  fetchAnalytics = async ({ query, columnConfigs, queryBuilder }) => {
+      const runningQueries = columnConfigs
+        .map(columnConfig => this.resolveQuery({ columnConfig, query, queryBuilder }));
 
       const values = await Promise.all(runningQueries);
 
@@ -71,9 +80,9 @@ export default class ComparisonTableRow extends Component {
     }
 
   render() {
-    const { columnKeys, query } = this.props;
+    const { columnConfigs, query } = this.props;
     const { values } = this.state;
-    const isLoading = values.length !== columnKeys.length;
+    const isLoading = values.length !== columnConfigs.length;
 
     const sortedValues = values.filter(v => v !== null).sort((a, b) => a - b);
     const [lowestValue, ...highestValues] = sortedValues;
@@ -84,7 +93,7 @@ export default class ComparisonTableRow extends Component {
         <td >
           <ComparisonTableRowLabel info={query.info}>{query.label}</ComparisonTableRowLabel>
         </td>
-        {columnKeys.map((key, index) =>
+        {columnConfigs.map(({ key }, index) =>
           React.createElement(
             cellTypes[query.type],
             { key, value: values[index], loading: isLoading, highestValue, lowestValue }
