@@ -13,7 +13,7 @@ export default class Main extends Component {
     fromDate: initialPeriod.fromDate(),
     toDate: initialPeriod.toDate(),
     filters: [],
-    queryBuilder: new Bitmovin({ apiKey: this.props.apiKey }).analytics.queries.builder,
+    queryBuilder: new Bitmovin({ apiKey: this.props.apiKey, tenantOrgId: this.props.tenantOrgId }).analytics.queries.builder,
   };
 
   currentLicenseKey = () => {
